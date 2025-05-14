@@ -1,6 +1,3 @@
-# vectorai-vscode-plugin
-Auxiliar desenvolvedores a escrever, corrigir e otimizar consultas vetoriais e semânticas em bancos PostgreSQL (com pgvector), usando AI local (modelo HuggingFace).  Interface nativa no VS Code (barra lateral, comandos, input/output via WebView ou painel integrado).  Sugestões e insights em tempo real.
-
 # Projeto: Vector AI Plugin (VS Code)
 
 ## Visão Geral
@@ -72,7 +69,5 @@ Esses comandos aparecerão no menu de contexto, paleta de comandos e em atalhos 
 ---
 
 **Status:** Início do desenvolvimento
-
-**Repositório:** A ser criado
 
 **Objetivo:** Transformar práticas de IA em produtividade no editor favorito dos desenvolvedores
