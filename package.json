@@ -1,0 +1,49 @@
+{
+  "name": "vector-ai-vscode-plugin",
+  "displayName": "Vector AI VS Code Plugin",
+  "description": "A VS Code plugin to generate embeddings, perform semantic searches, and optimize code using Generative AI with HuggingFace.",
+  "version": "0.1.0",
+  "publisher": "your-username",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "activationEvents": [
+    "onCommand:vector-ai.generateEmbedding",
+    "onCommand:vector-ai.semanticSearch",
+    "onCommand:vector-ai.suggestOptimization"
+  ],
+  "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "dependencies": {
+    "axios": "^0.21.4",
+    "huggingface": "^1.4.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.18.63",
+    "@types/pg": "^8.15.1",
+    "@types/vscode": "^1.100.0",
+    "typescript": "^4.9.5",
+    "vscode": "^1.1.37"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "vector-ai.generateEmbedding",
+        "title": "Generate Embedding"
+      },
+      {
+        "command": "vector-ai.semanticSearch",
+        "title": "Semantic Search"
+      },
+      {
+        "command": "vector-ai.suggestOptimization",
+        "title": "Suggest Optimization"
+      }
+    ]
+  }
+}
