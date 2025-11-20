@@ -1,5 +1,7 @@
+// src/services/dbConnector.ts
 import { Pool } from 'pg';
 
+// Configuração da conexão com PostgreSQL
 const pool = new Pool({
   user: 'user',
   host: 'localhost',
@@ -8,13 +10,31 @@ const pool = new Pool({
   port: 5432,
 });
 
-export async function semanticSearch(query: string) {
-  const client = await pool.connect();
-  try {
-    const sql = `SELECT * FROM documents ORDER BY embedding <#> $1 LIMIT 5`;
-    const res = await client.query(sql, [query]);
-    return res.rows;
-  } finally {
-    client.release();
-  }
+// Tipo de retorno esperado da query
+export interface DocumentRow {
+  id: number;
+  text: string;
+  embedding: number[];
 }
+
+// Objeto dbConnector com métodos
+export const dbConnector = {
+  /**
+   * Busca semântica usando pgvector
+   * @param query Embedding do texto
+   * @returns Array de documentos ordenados pela similaridade
+   */
+  semanticSearch: async (query: number[]): Promise<DocumentRow[]> => {
+    const client = await pool.connect();
+    try {
+      const sql = `SELECT * FROM documents ORDER BY embedding <#> $1 LIMIT 5`;
+      const res = await client.query(sql, [query]);
+      return res.rows as DocumentRow[];
+    } catch (err) {
+      console.error('Erro no semanticSearch DB:', err);
+      return []; // Retorno seguro em caso de erro
+    } finally {
+      client.release();
+    }
+  },
+};

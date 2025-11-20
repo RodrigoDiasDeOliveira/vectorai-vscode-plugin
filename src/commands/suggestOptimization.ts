@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { suggestQueryImprovements } from '/workspaces/vectorai-vscode-plugin/src/services/hugginfaceService';
+import { suggestQueryImprovements } from '../services/huggingfaceService';
 
 export async function suggestOptimizationCommand() {
   const editor = vscode.window.activeTextEditor;
