@@ -62,3 +62,92 @@ Integrated directly into the editor:
 # Architecture
 
 VectorAI follows a layered architecture:
+src/
+├── extension.ts
+│
+├── commands/
+│ ├── generateEmbedding.ts
+│ ├── semanticSearch.ts
+│ └── suggestOptimization.ts
+│
+├── services/
+│ ├── huggingfaceService.ts
+│ ├── dbConnector.ts
+│ └── VectorAIService.ts
+│
+├── utils/
+│ └── logger.ts
+│
+├── tests/
+│
+└── mocks/
+
+
+## Architectural Principles
+
+- Separation of responsibilities
+- Service-based integrations
+- Testable commands
+- Provider abstraction
+- AI service isolation
+
+Architecture decisions are documented using ADRs.
+
+---
+
+# Commands
+
+Available commands:
+
+### `vectorAI.generateEmbedding`
+
+Generates embeddings from selected text.
+
+### `vectorAI.semanticSearch`
+
+Executes semantic similarity search using vector embeddings.
+
+### `vectorAI.suggestOptimization`
+
+Generates AI-powered improvement suggestions.
+
+---
+
+# Technology Stack
+
+## Core
+
+- TypeScript
+- Visual Studio Code Extension API
+- Node.js
+
+## AI
+
+- Hugging Face Models
+- Embedding generation
+- Semantic similarity search
+
+## Database
+
+- PostgreSQL
+- pgvector support
+
+## Testing
+
+- Jest
+- ts-jest
+- VS Code API mocks
+
+## Tooling
+
+- ESLint
+- TypeScript Compiler
+- VSCE Packaging
+
+---
+
+# Development
+
+Install dependencies:
+
+npm install
