@@ -13,6 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
+    "isolatedModules": true,
     "types": [
       "node",
       "jest"

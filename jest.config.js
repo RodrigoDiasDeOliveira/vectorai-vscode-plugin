@@ -1,6 +1,13 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleFileExtensions: ['ts', 'js'],
-  testMatch: ['**/*.test.ts'],
+
+  moduleNameMapper: {
+    "^vscode$": "<rootDir>/src/_mocks_/vscode.ts"
+  },
+
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/dist/"
+  ]
 };

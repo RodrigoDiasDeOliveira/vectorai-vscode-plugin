@@ -22,21 +22,22 @@
     "typescript": "5.5"
   },
   "dependencies": {
-    "axios": "^1.18.0"
+    "axios": "^1.18.0",
+    "pg": "^8.22.0"
   },
-  "contributes" : {
-  "configuration": {
-    "title": "VectorAI",
-    "properties": {
-      "vectorai.dbHost": {
-        "type": "string",
-        "default": "localhost"
-      },
-      "vectorai.dbPort": {
-        "type": "number",
-        "default": 5432
+  "contributes": {
+    "configuration": {
+      "title": "VectorAI",
+      "properties": {
+        "vectorai.dbHost": {
+          "type": "string",
+          "default": "localhost"
+        },
+        "vectorai.dbPort": {
+          "type": "number",
+          "default": 5432
+        }
       }
     }
   }
-}
 }

@@ -2,21 +2,38 @@ import * as vscode from 'vscode';
 import { huggingfaceService } from '../services/huggingfaceService';
 import { Logger } from '../utils/logger';
 
-export async function suggestOptimizationCommand() {
-  const editor = vscode.window.activeTextEditor;
-  if (!editor) return;
+export async function suggestOptimizationCommand(): Promise<string> {
 
-  const selection = editor.document.getText(editor.selection);
-  if (!selection.trim()) {
-    return Logger.error('Selecione uma query SQL para otimizar.');
+  const input = await vscode.window.showInputBox({
+    prompt: 'Digite a query SQL para otimizar'
+  });
+
+  if (!input) {
+    return '';
   }
 
   try {
-    const suggestion = await huggingfaceService.suggestQueryImprovements(selection);
-    console.log(suggestion);
+
+    const suggestion =
+      await huggingfaceService.suggestQueryImprovements(input);
+
     Logger.log('Sugestão de otimização gerada.');
-    vscode.window.showInformationMessage('Sugestão gerada! Veja o console ou Output.');
-  } catch (error: any) {
-    Logger.error(error.message);
+
+    vscode.window.showInformationMessage(
+      'Sugestão gerada! Veja o console ou Output.'
+    );
+
+    return suggestion;
+
+  } catch (error: unknown) {
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : String(error);
+
+    Logger.error(message);
+
+    return '';
   }
 }
