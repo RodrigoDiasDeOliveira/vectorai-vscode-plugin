@@ -13,15 +13,30 @@
     "@types/node": "^20.x",
     "@types/pg": "^8.11.0",
     "@types/vscode": "^1.85.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "@vscode/vsce": "^2.25.0",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.1",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.0",
-    "typescript": "^5.5.0"
+    "typescript": "5.5"
   },
   "dependencies": {
     "axios": "^1.18.0"
+  },
+  "contributes" : {
+  "configuration": {
+    "title": "VectorAI",
+    "properties": {
+      "vectorai.dbHost": {
+        "type": "string",
+        "default": "localhost"
+      },
+      "vectorai.dbPort": {
+        "type": "number",
+        "default": 5432
+      }
+    }
   }
+}
 }

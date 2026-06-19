@@ -4,19 +4,19 @@ import { Logger } from '../utils/logger';
 
 let pool: Pool | null = null;
 
-function getPool() {
+function getPool(): Pool {
   if (!pool) {
     const config = vscode.workspace.getConfiguration('vectorai');
-    // Você pode expandir as configurações depois
+
     pool = new Pool({
-      user: 'seu_usuario',
-      host: 'localhost',
-      database: 'seu_banco',
-      password: 'sua_senha',
-      port: 5432,
-      // ssl: { rejectUnauthorized: false } // se necessário
+      user: config.get<string>('dbUser', 'seu_usuario'),
+      host: config.get<string>('dbHost', 'localhost'),
+      database: config.get<string>('dbName', 'seu_banco'),
+      password: config.get<string>('dbPassword', 'sua_senha'),
+      port: config.get<number>('dbPort', 5432)
     });
   }
+
   return pool;
 }
 
@@ -24,24 +24,41 @@ export interface DocumentRow {
   id: number;
   text: string;
   embedding: number[];
-  // adicione outros campos conforme sua tabela
 }
 
 export const dbConnector = {
+
   async semanticSearch(queryEmbedding: number[]): Promise<DocumentRow[]> {
+
     const client = await getPool().connect();
+
     try {
-      const sql = `SELECT id, text, embedding 
-                   FROM documents 
-                   ORDER BY embedding <#> $1 
-                   LIMIT 10`;
+
+      const sql = `
+        SELECT id, text, embedding
+        FROM documents
+        ORDER BY embedding <#> $1
+        LIMIT 10
+      `;
+
       const res = await client.query(sql, [queryEmbedding]);
+
       return res.rows as DocumentRow[];
-    } catch (err: any) {
-      Logger.error(`Erro no banco: ${err.message}`);
+
+    } catch (err: unknown) {
+
+      const error = err instanceof Error 
+        ? err.message 
+        : String(err);
+
+      Logger.error(`Erro no banco: ${error}`);
+
       return [];
+
     } finally {
+
       client.release();
+
     }
   }
 };
