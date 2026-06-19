@@ -15,23 +15,13 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dbConnector = void 0;
 const pg_1 = require("pg");
@@ -41,14 +31,12 @@ let pool = null;
 function getPool() {
     if (!pool) {
         const config = vscode.workspace.getConfiguration('vectorai');
-        // Você pode expandir as configurações depois
         pool = new pg_1.Pool({
-            user: 'seu_usuario',
-            host: 'localhost',
-            database: 'seu_banco',
-            password: 'sua_senha',
-            port: 5432,
-            // ssl: { rejectUnauthorized: false } // se necessário
+            user: config.get('dbUser', 'seu_usuario'),
+            host: config.get('dbHost', 'localhost'),
+            database: config.get('dbName', 'seu_banco'),
+            password: config.get('dbPassword', 'sua_senha'),
+            port: config.get('dbPort', 5432)
         });
     }
     return pool;
@@ -57,15 +45,20 @@ exports.dbConnector = {
     async semanticSearch(queryEmbedding) {
         const client = await getPool().connect();
         try {
-            const sql = `SELECT id, text, embedding 
-                   FROM documents 
-                   ORDER BY embedding <#> $1 
-                   LIMIT 10`;
+            const sql = `
+        SELECT id, text, embedding
+        FROM documents
+        ORDER BY embedding <#> $1
+        LIMIT 10
+      `;
             const res = await client.query(sql, [queryEmbedding]);
             return res.rows;
         }
         catch (err) {
-            logger_1.Logger.error(`Erro no banco: ${err.message}`);
+            const error = err instanceof Error
+                ? err.message
+                : String(err);
+            logger_1.Logger.error(`Erro no banco: ${error}`);
             return [];
         }
         finally {

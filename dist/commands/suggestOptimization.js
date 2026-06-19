@@ -15,44 +15,37 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.suggestOptimizationCommand = suggestOptimizationCommand;
 const vscode = __importStar(require("vscode"));
 const huggingfaceService_1 = require("../services/huggingfaceService");
 const logger_1 = require("../utils/logger");
 async function suggestOptimizationCommand() {
-    const editor = vscode.window.activeTextEditor;
-    if (!editor)
-        return;
-    const selection = editor.document.getText(editor.selection);
-    if (!selection.trim()) {
-        return logger_1.Logger.error('Selecione uma query SQL para otimizar.');
+    const input = await vscode.window.showInputBox({
+        prompt: 'Digite a query SQL para otimizar'
+    });
+    if (!input) {
+        return '';
     }
     try {
-        const suggestion = await huggingfaceService_1.huggingfaceService.suggestQueryImprovements(selection);
-        console.log(suggestion);
+        const suggestion = await huggingfaceService_1.huggingfaceService.suggestQueryImprovements(input);
         logger_1.Logger.log('Sugestão de otimização gerada.');
         vscode.window.showInformationMessage('Sugestão gerada! Veja o console ou Output.');
+        return suggestion;
     }
     catch (error) {
-        logger_1.Logger.error(error.message);
+        const message = error instanceof Error
+            ? error.message
+            : String(error);
+        logger_1.Logger.error(message);
+        return '';
     }
 }
 //# sourceMappingURL=suggestOptimization.js.map

@@ -1,4 +1,23 @@
 {
+  "name": "vectorai-vscode-plugin",
+  "displayName": "VectorAI",
+  "description": "AI-powered semantic search and embedding assistant for Visual Studio Code",
+  "version": "0.1.0",
+  "publisher": "RodrigoDiasDeOliveira",
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/RodrigoDiasDeOliveira/vectorai-vscode-plugin"
+},
+  "engines": {
+    "vscode": "^1.85.0"
+
+  },
+  "categories": [
+    "Other"
+  ],
+
+ 
+
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
