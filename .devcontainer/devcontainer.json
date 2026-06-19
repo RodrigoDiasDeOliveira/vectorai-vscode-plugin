@@ -19,5 +19,5 @@
 
   "postCreateCommand": "npm install",
 
-  "remoteUser": "node"
+  "remoteUser": "codespace"
 }
