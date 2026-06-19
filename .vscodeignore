@@ -11,3 +11,9 @@ docs/**
 *.md
 *.yml
 *.yaml
+node_modules/
+coverage/
+.github/
+.devcontainer/
+src/
+*.log
