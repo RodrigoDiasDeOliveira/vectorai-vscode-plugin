@@ -1,0 +1,36 @@
+# ADR-006: Automated Testing Strategy
+
+## Status
+
+Accepted
+
+## Context
+
+VS Code extensions depend on APIs unavailable outside the editor runtime.
+
+The project requires automated validation.
+
+## Decision
+
+Jest will be used for unit testing.
+
+VS Code APIs will be mocked.
+
+The test strategy covers:
+
+- Commands
+- Services
+- Database connectors
+- AI integrations
+
+## Consequences
+
+Positive:
+
+- Faster development feedback
+- Safer refactoring
+- Better code quality
+
+Negative:
+
+- Mock maintenance required

@@ -1,0 +1,23 @@
+{
+  "name": "VectorAI VS Code Plugin",
+
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-typescript-next",
+        "ms-vscode.vscode-json"
+      ]
+    }
+  },
+
+  "forwardPorts": [],
+
+  "postCreateCommand": "npm install",
+
+  "remoteUser": "node"
+}

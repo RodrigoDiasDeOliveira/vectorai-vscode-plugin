@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
 dist/
+covarage/
+*.vsix
 
 # Environment variables
 .env

@@ -1,0 +1,32 @@
+# ADR-004: PostgreSQL Vector Storage
+
+## Status
+
+Accepted
+
+## Context
+
+Semantic search requires persistent storage for embeddings.
+
+The project requires a database solution that supports vector similarity operations.
+
+## Decision
+
+PostgreSQL will be used as the initial persistence layer with vector capabilities.
+
+Database access will be isolated through:
+
+services/dbConnector.ts
+
+## Consequences
+
+Positive:
+
+- Mature database ecosystem
+- SQL compatibility
+- Supports vector search scenarios
+
+Negative:
+
+- Requires database configuration
+- Scaling may require future evaluation

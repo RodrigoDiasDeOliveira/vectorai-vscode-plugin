@@ -1,0 +1,37 @@
+# ADR-005: Command and Service Separation
+
+## Status
+
+Accepted
+
+## Context
+
+VS Code commands directly accessing AI services would create tightly coupled code.
+
+## Decision
+
+Commands will only orchestrate user interactions.
+
+Business operations must be implemented inside services.
+
+Example:
+
+Command:
+
+generateEmbedding.ts
+
+Service:
+
+huggingfaceService.ts
+
+## Consequences
+
+Positive:
+
+- Improved testability
+- Easier replacement of dependencies
+- Cleaner architecture
+
+Negative:
+
+- More abstraction layers
