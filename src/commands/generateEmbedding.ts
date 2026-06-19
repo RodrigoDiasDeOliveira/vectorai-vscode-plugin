@@ -1,19 +1,29 @@
 import * as vscode from 'vscode';
-import { huggingfaceService  } from '../services/huggingfaceService';
+import { huggingfaceService } from '../services/huggingfaceService';
+import { Logger } from '../utils/logger';
 
 export async function generateEmbedding() {
   const editor = vscode.window.activeTextEditor;
-  if (!editor) return;
-
-  const selection = editor.selection;
-  const text = editor.document.getText(selection);
-
-  if (!text.trim()) {
-    vscode.window.showWarningMessage('Selecione algum texto para gerar o embedding.');
-    return;
+  if (!editor) {
+    return Logger.error('Nenhum editor ativo.');
   }
 
-  const embedding = await  huggingfaceService.getEmbeddingFromText(text);
-  vscode.window.showInformationMessage('Embedding gerado com sucesso. Veja o console para detalhes.');
-  console.log('Embedding:', embedding);
+  const selection = editor.document.getText(editor.selection);
+  if (!selection.trim()) {
+    return Logger.error('Selecione um texto para gerar o embedding.');
+  }
+
+  try {
+    Logger.log('Gerando embedding...');
+    const embedding = await huggingfaceService.getEmbeddingFromText(selection);
+
+    const output = JSON.stringify(embedding, null, 2);
+    Logger.log(`✅ Embedding gerado (${embedding.length} dimensões)`);
+    vscode.window.showInformationMessage(`Embedding gerado com ${embedding.length} dimensões!`);
+
+    // Opcional: copiar para clipboard
+    await vscode.env.clipboard.writeText(output);
+  } catch (error: any) {
+    Logger.error(error.message);
+  }
 }

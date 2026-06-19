@@ -1,52 +1,23 @@
 {
-  "name": "vector-ai-vscode-plugin",
-  "displayName": "Vector AI VS Code Plugin",
-  "description": "A VS Code plugin to generate embeddings, perform semantic searches, and optimize code using Generative AI with HuggingFace.",
-  "version": "0.1.0",
-  "publisher": "your-username",
-  "engines": {
-    "vscode": "^1.60.0"
-  },
-  "activationEvents": [
-    "onCommand:vector-ai.generateEmbedding",
-    "onCommand:vector-ai.semanticSearch",
-    "onCommand:vector-ai.suggestOptimization"
-  ],
-  "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
-  },
-  "dependencies": {
-    "axios": "^0.21.4",
-    "huggingface": "^1.4.0",
-    "pg": "^8.16.0"
+    "watch": "tsc -watch -p ./",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "package": "vsce package",
+    "publish": "vsce publish"
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/node": "^14.18.63",
-    "@types/pg": "^8.15.1",
-    "@types/vscode": "^1.100.0",
-    "jest": "^30.2.0",
-    "ts-jest": "^29.4.5",
-    "typescript": "^4.9.5",
-    "vscode": "^1.1.37"
-  },
-  "contributes": {
-    "commands": [
-      {
-        "command": "vector-ai.generateEmbedding",
-        "title": "Generate Embedding"
-      },
-      {
-        "command": "vector-ai.semanticSearch",
-        "title": "Semantic Search"
-      },
-      {
-        "command": "vector-ai.suggestOptimization",
-        "title": "Suggest Optimization"
-      }
-    ]
+    "@types/node": "^20.x",
+    "@types/pg": "^8.11.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.0",
+    "typescript": "^5.5.0",
+    "@vscode/vsce": "^2.25.0"
   }
 }

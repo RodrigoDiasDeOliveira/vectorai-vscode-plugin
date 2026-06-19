@@ -1,40 +1,47 @@
-// src/services/dbConnector.ts
 import { Pool } from 'pg';
+import * as vscode from 'vscode';
+import { Logger } from '../utils/logger';
 
-// Configuração da conexão com PostgreSQL
-const pool = new Pool({
-  user: 'user',
-  host: 'localhost',
-  database: 'vector_db',
-  password: 'password',
-  port: 5432,
-});
+let pool: Pool | null = null;
 
-// Tipo de retorno esperado da query
+function getPool() {
+  if (!pool) {
+    const config = vscode.workspace.getConfiguration('vectorai');
+    // Você pode expandir as configurações depois
+    pool = new Pool({
+      user: 'seu_usuario',
+      host: 'localhost',
+      database: 'seu_banco',
+      password: 'sua_senha',
+      port: 5432,
+      // ssl: { rejectUnauthorized: false } // se necessário
+    });
+  }
+  return pool;
+}
+
 export interface DocumentRow {
   id: number;
   text: string;
   embedding: number[];
+  // adicione outros campos conforme sua tabela
 }
 
-// Objeto dbConnector com métodos
 export const dbConnector = {
-  /**
-   * Busca semântica usando pgvector
-   * @param query Embedding do texto
-   * @returns Array de documentos ordenados pela similaridade
-   */
-  semanticSearch: async (query: number[]): Promise<DocumentRow[]> => {
-    const client = await pool.connect();
+  async semanticSearch(queryEmbedding: number[]): Promise<DocumentRow[]> {
+    const client = await getPool().connect();
     try {
-      const sql = `SELECT * FROM documents ORDER BY embedding <#> $1 LIMIT 5`;
-      const res = await client.query(sql, [query]);
+      const sql = `SELECT id, text, embedding 
+                   FROM documents 
+                   ORDER BY embedding <#> $1 
+                   LIMIT 10`;
+      const res = await client.query(sql, [queryEmbedding]);
       return res.rows as DocumentRow[];
-    } catch (err) {
-      console.error('Erro no semanticSearch DB:', err);
-      return []; // Retorno seguro em caso de erro
+    } catch (err: any) {
+      Logger.error(`Erro no banco: ${err.message}`);
+      return [];
     } finally {
       client.release();
     }
-  },
+  }
 };

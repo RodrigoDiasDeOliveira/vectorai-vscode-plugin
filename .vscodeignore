@@ -1,4 +1,13 @@
-node_modules
-dist
-*.log
-.vscode
+.vscode/**
+.vscode-test/**
+out/**
+node_modules/**
+src/**
+**/*.map
+**/*.ts
+.gitignore
+**/.git/**
+docs/**
+*.md
+*.yml
+*.yaml

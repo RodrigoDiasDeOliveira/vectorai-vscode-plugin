@@ -1,18 +1,34 @@
-// src/services/huggingfaceService.ts
 import axios from 'axios';
+import * as vscode from 'vscode';
+import { Logger } from '../utils/logger';
 
-const HF_API_URL = 'https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2';
-const HF_TOKEN = process.env.HF_API_TOKEN || '';
+const HF_API_URL = 'https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2';
 
 export const huggingfaceService = {
-  getEmbeddingFromText: async (text: string): Promise<number[]> => {
-    const res = await axios.post(HF_API_URL, { inputs: text }, {
-      headers: { Authorization: `Bearer ${HF_TOKEN}` },
-    });
-    return res.data[0];
+  async getEmbeddingFromText(text: string): Promise<number[]> {
+    const config = vscode.workspace.getConfiguration('vectorai');
+    const apiKey = config.get<string>('huggingfaceApiKey');
+
+    if (!apiKey) {
+      throw new Error('Hugging Face API Key não configurada. Configure em Settings → Vector AI.');
+    }
+
+    try {
+      const response = await axios.post(HF_API_URL, { inputs: text }, {
+        headers: { Authorization: `Bearer ${apiKey}` },
+        timeout: 15000
+      });
+
+      const embedding = Array.isArray(response.data) ? response.data[0] : response.data;
+      Logger.log('Embedding gerado com sucesso');
+      return embedding;
+    } catch (error: any) {
+      Logger.error(`Erro ao gerar embedding: ${error.message}`);
+      throw error;
+    }
   },
 
-  suggestQueryImprovements: async (query: string): Promise<string> => {
-    return `Sugestão para '${query}': use cláusulas WHERE mais específicas.`;
-  },
+  async suggestQueryImprovements(query: string): Promise<string> {
+    return `🔧 Sugestão para a query:\n\n${query}\n\n→ Use índice HNSW, filtre com metadados, combine com busca por palavras-chave e limite a quantidade de resultados.`;
+  }
 };

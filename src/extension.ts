@@ -1,27 +1,19 @@
-// src/extension.ts
 import * as vscode from 'vscode';
-import { EmbeddingCommand } from '/workspaces/vectorai-vscode-plugin/src/commands/embeddingCommand';
-import { VectorAIService } from './services/VectorAIService';
+import { generateEmbedding } from './commands/generateEmbedding';
+import { semanticSearchCommand } from './commands/semanticSearch';
+import { suggestOptimizationCommand } from './commands/suggestOptimization';
 import { Logger } from './utils/logger';
 
 export function activate(context: vscode.ExtensionContext) {
-  Logger.log('VectorAI Plugin activated.');
+  Logger.log('Vector AI Plugin ativado com sucesso! 🚀');
 
-  const huggingfaceApiUrl = 'https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2';
-  const huggingfaceApiKey = vscode.workspace.getConfiguration('vectorai').get<string>('huggingfaceApiKey') || '';
-
-  if (!huggingfaceApiKey) {
-    Logger.error('HuggingFace API key not configured. Set it in your settings.');
-    return;
-  }
-
-  const vectorService = new VectorAIService(huggingfaceApiUrl, huggingfaceApiKey);
-  const embeddingCommand = new EmbeddingCommand(vectorService);
-
-  context.subscriptions.push(embeddingCommand.register());
+  context.subscriptions.push(
+    vscode.commands.registerCommand('vectorai.generateEmbedding', generateEmbedding),
+    vscode.commands.registerCommand('vectorai.semanticSearch', semanticSearchCommand),
+    vscode.commands.registerCommand('vectorai.suggestOptimization', suggestOptimizationCommand)
+  );
 }
 
 export function deactivate() {
-  Logger.log('VectorAI Plugin deactivated.');
+  Logger.log('Vector AI Plugin desativado.');
 }
-

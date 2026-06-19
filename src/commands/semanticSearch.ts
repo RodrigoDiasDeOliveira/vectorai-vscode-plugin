@@ -1,38 +1,28 @@
-// src/commands/semanticSearch.ts
+
 import * as vscode from 'vscode';
 import { dbConnector } from '../services/dbConnector';
 import { huggingfaceService } from '../services/huggingfaceService';
+import { Logger } from '../utils/logger';
 
-/**
- * Comando de busca semântica no VS Code
- * - Solicita input do usuário
- * - Converte texto em embedding via huggingfaceService
- * - Chama dbConnector.semanticSearch
- * - Mostra resultados no VS Code
- * - Retorna resultados para testes unitários
- */
 export async function semanticSearchCommand() {
-  const query = await vscode.window.showInputBox({ prompt: 'Digite a busca semântica:' });
+  const query = await vscode.window.showInputBox({
+    prompt: 'Digite o texto para busca semântica',
+    placeHolder: 'Ex: Como funciona o pgvector?'
+  });
 
-  // Retorna array vazio se input cancelado ou vazio
   if (!query?.trim()) return [];
 
   try {
-    // Converte texto em embedding numérico
     const embedding = await huggingfaceService.getEmbeddingFromText(query);
-
-    // Busca semântica no banco
     const results = await dbConnector.semanticSearch(embedding);
 
-    // Mostra mensagem de sucesso
-    vscode.window.showInformationMessage(`Resultados encontrados: ${results.length}`);
+    vscode.window.showInformationMessage(`✅ ${results.length} resultados encontrados`);
     console.log('Resultados da busca semântica:', results);
+    Logger.log(`Busca semântica concluída com ${results.length} resultados.`);
 
-    return results; // Retorno para testes unitários
-  } catch (err) {
-    console.error('Erro na busca semântica:', err);
-    vscode.window.showErrorMessage('Erro na busca semântica. Veja o console.');
-
-    return []; // Retorno consistente em caso de erro
+    return results;
+  } catch (err: any) {
+    Logger.error(`Erro na busca semântica: ${err.message}`);
+    return [];
   }
 }
